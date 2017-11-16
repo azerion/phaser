@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.3 "Kore Springs" - Built: Thu Nov 16 2017 11:11:07
+* v2.6.4 "Kore Springs" - Built: Thu Nov 16 2017 13:53:26
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -7945,7 +7945,7 @@ var Phaser = Phaser || {    // jshint ignore:line
     * @constant
     * @type {string}
     */
-    VERSION: '2.6.2',
+    VERSION: '2.6.4',
 
     /**
     * An array of Phaser game instances.
@@ -8404,9 +8404,9 @@ var Phaser = Phaser || {    // jshint ignore:line
 
     /**
      * Various blend modes supported by Pixi.
-     * 
+     *
      * IMPORTANT: The WebGL renderer only supports the NORMAL, ADD, MULTIPLY and SCREEN blend modes.
-     * 
+     *
      * @constant
      * @property {Number} blendModes.NORMAL
      * @property {Number} blendModes.ADD
@@ -20648,7 +20648,7 @@ Object.defineProperty(Phaser.World.prototype, "randomY", {
 /**
 * This is where the magic happens. The Game object is the heart of your game,
 * providing quick access to common functions and handling the boot process.
-* 
+*
 * "Hell, there are no rules here - we're trying to accomplish something."
 *                                                       Thomas A. Edison
 *
@@ -20860,7 +20860,7 @@ Phaser.Game = function (width, height, renderer, parent, state, transparent, ant
     * @property {Phaser.Physics} physics - Reference to the physics manager.
     */
     this.physics = null;
-    
+
     /**
     * @property {Phaser.PluginManager} plugins - Reference to the plugin manager.
     */
@@ -21284,12 +21284,12 @@ Phaser.Game.prototype = {
         if (this.device.chrome)
         {
             var args = [
-                '%c %c %c Phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c http://phaser.io %c\u2665%c\u2665%c\u2665',
-                'background: #fb8cb3',
-                'background: #d44a52',
-                'color: #ffffff; background: #871905;',
-                'background: #d44a52',
-                'background: #fb8cb3',
+                '%c %c %c @orange-games/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c http://phaser.io %c\u2665%c\u2665%c\u2665',
+                'background: #F47820',
+                'background: #ED873F',
+                'color: #ffffff; background: #DD6612;',
+                'background: #ED873F',
+                'background: #F47820',
                 'background: #ffffff'
             ];
 
@@ -21377,7 +21377,7 @@ Phaser.Game.prototype = {
         if (this.renderType !== Phaser.HEADLESS)
         {
             this.stage.smoothed = this.antialias;
-            
+
             Phaser.Canvas.addToDOM(this.canvas, this.parent, false);
             Phaser.Canvas.setTouchAction(this.canvas);
         }
@@ -21835,11 +21835,11 @@ Object.defineProperty(Phaser.Game.prototype, "paused", {
 });
 
 /**
- * 
+ *
  * "Deleted code is debugged code." - Jeff Sickel
  *
  * ヽ(〃＾▽＾〃)ﾉ
- * 
+ *
 */
 
 /**

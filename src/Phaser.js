@@ -14,7 +14,7 @@ var Phaser = Phaser || {    // jshint ignore:line
     * @constant
     * @type {string}
     */
-    VERSION: '2.6.2',
+    VERSION: '2.6.4',
 
     /**
     * An array of Phaser game instances.
@@ -473,9 +473,9 @@ var Phaser = Phaser || {    // jshint ignore:line
 
     /**
      * Various blend modes supported by Pixi.
-     * 
+     *
      * IMPORTANT: The WebGL renderer only supports the NORMAL, ADD, MULTIPLY and SCREEN blend modes.
-     * 
+     *
      * @constant
      * @property {Number} blendModes.NORMAL
      * @property {Number} blendModes.ADD
