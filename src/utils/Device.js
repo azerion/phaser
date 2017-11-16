@@ -68,37 +68,37 @@ Phaser.Device = function () {
     * @default
     */
     this.cocoonJS = false;
-    
+
     /**
     * @property {boolean} cocoonJSApp - Is this game running with CocoonJS.App?
     * @default
     */
     this.cocoonJSApp = false;
-    
+
     /**
     * @property {boolean} cordova - Is the game running under Apache Cordova?
     * @default
     */
     this.cordova = false;
-    
+
     /**
     * @property {boolean} node - Is the game running under Node.js?
     * @default
     */
     this.node = false;
-    
+
     /**
     * @property {boolean} nodeWebkit - Is the game running under Node-Webkit?
     * @default
     */
     this.nodeWebkit = false;
-    
+
     /**
     * @property {boolean} electron - Is the game running under GitHub Electron?
     * @default
     */
     this.electron = false;
-    
+
     /**
     * @property {boolean} ejecta - Is the game running under Ejecta?
     * @default
@@ -575,7 +575,7 @@ Phaser.Device.whenReady = function (callback, context, nonPrimer) {
         readyCheck._monitor = readyCheck.bind(this);
         readyCheck._queue = readyCheck._queue || [];
         readyCheck._queue.push([callback, context]);
-        
+
         var cordova = typeof window.cordova !== 'undefined';
         var cocoonJS = navigator['isCocoonJS'];
 
@@ -738,7 +738,11 @@ Phaser.Device._initialize = function () {
         device.file = !!window['File'] && !!window['FileReader'] && !!window['FileList'] && !!window['Blob'];
         device.fileSystem = !!window['requestFileSystem'];
 
-        device.webGL = ( function () { try { var canvas = document.createElement( 'canvas' ); /*Force screencanvas to false*/ canvas.screencanvas = false; return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )();
+        var options = {
+            stencil: true
+        };
+
+        device.webGL = ( function () { try { var canvas = document.createElement( 'canvas' ); /*Force screencanvas to false*/ canvas.screencanvas = false; return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' , options) || canvas.getContext( 'experimental-webgl' , options) ); } catch( e ) { return false; } } )();
         device.webGL = !!device.webGL;
 
         device.worker = !!window['Worker'];
@@ -946,29 +950,29 @@ Phaser.Device._initialize = function () {
         {
             device.webApp = true;
         }
-        
+
         if (typeof window.cordova !== 'undefined')
         {
             device.cordova = true;
         }
-        
+
         if (typeof process !== 'undefined' && typeof require !== 'undefined')
         {
             device.node = true;
         }
-        
+
         if (device.node && typeof process.versions === 'object')
         {
             device.nodeWebkit = !!process.versions['node-webkit'];
-            
+
             device.electron = !!process.versions.electron;
         }
-        
+
         if (navigator['isCocoonJS'])
         {
             device.cocoonJS = true;
         }
-        
+
         if (device.cocoonJS)
         {
             try {
@@ -1364,7 +1368,7 @@ Phaser.Device.isConsoleOpen = function () {
 *
 * @example
 * var defaultRenderingMode = Phaser.Device.isAndroidStockBrowser() ? Phaser.CANVAS : Phaser.AUTO;
-* 
+*
 * @method isAndroidStockBrowser
 * @memberof Phaser.Device.prototype
 */

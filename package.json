@@ -1,6 +1,6 @@
 {
-  "name": "phaser",
-  "version": "2.6.2",
+  "name": "@orange-games/phaser",
+  "version": "2.6.3",
   "release": "Kore Springs",
   "description": "A fast, free and fun HTML5 Game Framework for Desktop and Mobile web browsers.",
   "author": "Richard Davey <rdavey@gmail.com> (http://www.photonstorm.com)",

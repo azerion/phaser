@@ -151,3 +151,21 @@ if (!window.console)
     window.console.log = window.console.assert = function(){};
     window.console.warn = window.console.assert = function(){};
 }
+
+/**
+ * Work-around for Firefox bug:
+ * http://flashgamedev.ru/viewtopic.php?f=20&t=12973
+ */
+if (/firefox/i.test(navigator.userAgent)) {
+    window.oldGetComputedStyle = window.getComputedStyle;
+    window.getComputedStyle = function (element, pseudoElt) {
+        var t = window.oldGetComputedStyle(element, pseudoElt);
+        if (t === null) {
+            return {
+                getPropertyValue: function () { return; }
+        };
+        } else {
+            return t;
+        }
+    };
+}

@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.2 "Kore Springs" - Built: Fri Aug 26 2016 01:02:57
+* v2.6.3 "Kore Springs" - Built: Thu Nov 16 2017 11:09:53
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -23435,6 +23435,24 @@ if (!window.console)
     window.console = {};
     window.console.log = window.console.assert = function(){};
     window.console.warn = window.console.assert = function(){};
+}
+
+/**
+ * Work-around for Firefox bug:
+ * http://flashgamedev.ru/viewtopic.php?f=20&t=12973
+ */
+if (/firefox/i.test(navigator.userAgent)) {
+    window.oldGetComputedStyle = window.getComputedStyle;
+    window.getComputedStyle = function (element, pseudoElt) {
+        var t = window.oldGetComputedStyle(element, pseudoElt);
+        if (t === null) {
+            return {
+                getPropertyValue: function () { return; }
+        };
+        } else {
+            return t;
+        }
+    };
 }
 
 /**
@@ -60257,37 +60275,37 @@ Phaser.Device = function () {
     * @default
     */
     this.cocoonJS = false;
-    
+
     /**
     * @property {boolean} cocoonJSApp - Is this game running with CocoonJS.App?
     * @default
     */
     this.cocoonJSApp = false;
-    
+
     /**
     * @property {boolean} cordova - Is the game running under Apache Cordova?
     * @default
     */
     this.cordova = false;
-    
+
     /**
     * @property {boolean} node - Is the game running under Node.js?
     * @default
     */
     this.node = false;
-    
+
     /**
     * @property {boolean} nodeWebkit - Is the game running under Node-Webkit?
     * @default
     */
     this.nodeWebkit = false;
-    
+
     /**
     * @property {boolean} electron - Is the game running under GitHub Electron?
     * @default
     */
     this.electron = false;
-    
+
     /**
     * @property {boolean} ejecta - Is the game running under Ejecta?
     * @default
@@ -60764,7 +60782,7 @@ Phaser.Device.whenReady = function (callback, context, nonPrimer) {
         readyCheck._monitor = readyCheck.bind(this);
         readyCheck._queue = readyCheck._queue || [];
         readyCheck._queue.push([callback, context]);
-        
+
         var cordova = typeof window.cordova !== 'undefined';
         var cocoonJS = navigator['isCocoonJS'];
 
@@ -60927,7 +60945,11 @@ Phaser.Device._initialize = function () {
         device.file = !!window['File'] && !!window['FileReader'] && !!window['FileList'] && !!window['Blob'];
         device.fileSystem = !!window['requestFileSystem'];
 
-        device.webGL = ( function () { try { var canvas = document.createElement( 'canvas' ); /*Force screencanvas to false*/ canvas.screencanvas = false; return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )();
+        var options = {
+            stencil: true
+        };
+
+        device.webGL = ( function () { try { var canvas = document.createElement( 'canvas' ); /*Force screencanvas to false*/ canvas.screencanvas = false; return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' , options) || canvas.getContext( 'experimental-webgl' , options) ); } catch( e ) { return false; } } )();
         device.webGL = !!device.webGL;
 
         device.worker = !!window['Worker'];
@@ -61135,29 +61157,29 @@ Phaser.Device._initialize = function () {
         {
             device.webApp = true;
         }
-        
+
         if (typeof window.cordova !== 'undefined')
         {
             device.cordova = true;
         }
-        
+
         if (typeof process !== 'undefined' && typeof require !== 'undefined')
         {
             device.node = true;
         }
-        
+
         if (device.node && typeof process.versions === 'object')
         {
             device.nodeWebkit = !!process.versions['node-webkit'];
-            
+
             device.electron = !!process.versions.electron;
         }
-        
+
         if (navigator['isCocoonJS'])
         {
             device.cocoonJS = true;
         }
-        
+
         if (device.cocoonJS)
         {
             try {
@@ -61553,7 +61575,7 @@ Phaser.Device.isConsoleOpen = function () {
 *
 * @example
 * var defaultRenderingMode = Phaser.Device.isAndroidStockBrowser() ? Phaser.CANVAS : Phaser.AUTO;
-* 
+*
 * @method isAndroidStockBrowser
 * @memberof Phaser.Device.prototype
 */
@@ -76969,7 +76991,7 @@ Phaser.SoundManager = function (game) {
     * Set to true to have all sound muted when the Phaser game pauses (such as on loss of focus),
     * or set to false to keep audio playing, regardless of the game pause state. You may need to
     * do this should you wish to control audio muting via external DOM buttons or similar.
-    * @property {boolean} muteOnPause 
+    * @property {boolean} muteOnPause
     * @default
     */
     this.muteOnPause = true;
@@ -77129,7 +77151,7 @@ Phaser.SoundManager.prototype = {
         if (!this.noAudio)
         {
             //  On mobile we need a native touch event before we can play anything, so capture it here
-            if (!this.game.device.cocoonJS && this.game.device.iOS || (window['PhaserGlobal'] && window['PhaserGlobal'].fakeiOSTouchLock))
+            if (!this.game.device.cocoonJS && (this.game.device.android || this.game.device.iOS || (window['PhaserGlobal'] && window['PhaserGlobal'].fakeiOSTouchLock)))
             {
                 this.setTouchLock();
             }
@@ -77150,7 +77172,7 @@ Phaser.SoundManager.prototype = {
             return;
         }
 
-        if (this.game.device.iOSVersion > 8)
+        if (this.game.device.iOSVersion > 8 || this.game.device.chromeVersion >= 55)
         {
             this.game.input.touch.addTouchLockCallback(this.unlock, this, true);
         }
@@ -77199,6 +77221,11 @@ Phaser.SoundManager.prototype = {
             else
             {
                 this._unlockSource.start(0);
+            }
+
+            //This fixes locked audio in Chrome > 55 cross origin iframes
+            if (this._unlockSource.context.state === 'suspended') {
+                this._unlockSource.context.resume();
             }
         }
 
