@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.4 "Kore Springs" - Built: Thu Nov 16 2017 13:53:02
+* v2.6.5 "Kore Springs" - Built: Tue May 08 2018 10:17:17
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -63538,7 +63538,7 @@ Phaser.SoundManager.prototype = {
         if (!this.noAudio)
         {
             //  On mobile we need a native touch event before we can play anything, so capture it here
-            if (!this.game.device.cocoonJS && (this.game.device.android || this.game.device.iOS || (window['PhaserGlobal'] && window['PhaserGlobal'].fakeiOSTouchLock)))
+            if (!this.game.device.cocoonJS && (this.game.device.chrome || this.game.device.iOS || (window['PhaserGlobal'] && window['PhaserGlobal'].fakeiOSTouchLock)))
             {
                 this.setTouchLock();
             }
@@ -71485,7 +71485,7 @@ Phaser.Video = function (game, key, url) {
         this.snapshot = new Phaser.BitmapData(this.game, '', this.width, this.height);
     }
 
-    if (!this.game.device.cocoonJS && (this.game.device.iOS || this.game.device.android) || (window['PhaserGlobal'] && window['PhaserGlobal'].fakeiOSTouchLock))
+    if (!this.game.device.cocoonJS && (this.game.device.iOS || this.game.device.chrome) || (window['PhaserGlobal'] && window['PhaserGlobal'].fakeiOSTouchLock))
     {
         this.setTouchLock();
     }
