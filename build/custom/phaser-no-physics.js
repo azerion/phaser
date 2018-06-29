@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.6 "Kore Springs" - Built: Tue May 08 2018 11:04:32
+* v2.6.7 "Kore Springs" - Built: Fri Jun 29 2018 11:19:08
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -46670,6 +46670,12 @@ Phaser.Device = function () {
     this.cocoonJSApp = false;
 
     /**
+     * @property {boolean} wechatMinigame - Is the game running within the WeChat minigame context?
+     * @default
+     */
+    this.wechatMinigame = false;
+
+    /**
     * @property {boolean} cordova - Is the game running under Apache Cordova?
     * @default
     */
@@ -47565,6 +47571,10 @@ Phaser.Device._initialize = function () {
         if (navigator['isCocoonJS'])
         {
             device.cocoonJS = true;
+        }
+
+        if (typeof window.wx !== 'undefined') {
+            device.wechatMinigame = true;
         }
 
         if (device.cocoonJS)
@@ -62784,7 +62794,7 @@ Phaser.Sound.prototype = {
             }
             else
             {
-                if (this._sound && (this.game.device.cocoonJS || this._sound.readyState === 4))
+                if (this._sound && (this.game.device.wechatMinigame || this.game.device.cocoonJS || this._sound.readyState === 4))
                 {
                     this._sound.play();
                     //  This doesn't become available until you call play(), wonderful ...

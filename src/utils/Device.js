@@ -76,6 +76,12 @@ Phaser.Device = function () {
     this.cocoonJSApp = false;
 
     /**
+     * @property {boolean} wechatMinigame - Is the game running within the WeChat minigame context?
+     * @default
+     */
+    this.wechatMinigame = false;
+
+    /**
     * @property {boolean} cordova - Is the game running under Apache Cordova?
     * @default
     */
@@ -971,6 +977,10 @@ Phaser.Device._initialize = function () {
         if (navigator['isCocoonJS'])
         {
             device.cocoonJS = true;
+        }
+
+        if (typeof window.wx !== 'undefined') {
+            device.wechatMinigame = true;
         }
 
         if (device.cocoonJS)
