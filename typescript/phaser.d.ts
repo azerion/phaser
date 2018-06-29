@@ -926,6 +926,7 @@ declare module Phaser {
         webGL: boolean;
         webm: boolean;
         webmVideo: boolean;
+        wechatMinigame: boolean;
         windows: boolean;
         windowsPhone: boolean;
         wheelEvent: string;

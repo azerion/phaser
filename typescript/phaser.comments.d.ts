@@ -5615,6 +5615,11 @@ declare module Phaser {
         webmVideo: boolean;
 
         /**
+         * Is the device running on wechat-minigame platform?
+         */
+        wechatMinigame: boolean;
+
+        /**
         * Is running on windows?
         */
         windows: boolean;

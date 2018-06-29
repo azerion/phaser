@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.7 "Kore Springs" - Built: Fri Jun 29 2018 11:19:04
+* v2.6.8 "Kore Springs" - Built: Fri Jun 29 2018 14:26:50
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -9145,7 +9145,7 @@ var Phaser = Phaser || {    // jshint ignore:line
     * @constant
     * @type {string}
     */
-    VERSION: '2.6.6',
+    VERSION: '2.6.8',
 
     /**
     * An array of Phaser game instances.
