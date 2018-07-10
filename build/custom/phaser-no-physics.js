@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.10 "Kore Springs" - Built: Thu Jul 05 2018 08:47:50
+* v2.6.11 "Kore Springs" - Built: Tue Jul 10 2018 11:56:51
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -9145,7 +9145,7 @@ var Phaser = Phaser || {    // jshint ignore:line
     * @constant
     * @type {string}
     */
-    VERSION: '2.6.10',
+    VERSION: '2.6.11',
 
     /**
     * An array of Phaser game instances.
@@ -62808,6 +62808,16 @@ Phaser.Sound.prototype = {
             {
                 if (this._sound && (this.game.device.wechatMinigame || this.game.device.cocoonJS || this._sound.readyState === 4))
                 {
+                    if (this.loop)
+                    {
+                        this._sound.loop = true;
+                    }
+
+                    if (!this.loop && marker === '' && this.game.device.wechatMinigame)
+                    {
+                        this._sound.addEventListener('ended', this.onEndedHandler.bind(this));
+                    }
+
                     this._sound.play();
                     //  This doesn't become available until you call play(), wonderful ...
                     this.totalDuration = this._sound.duration;

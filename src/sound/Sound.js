@@ -707,6 +707,16 @@ Phaser.Sound.prototype = {
             {
                 if (this._sound && (this.game.device.wechatMinigame || this.game.device.cocoonJS || this._sound.readyState === 4))
                 {
+                    if (this.loop)
+                    {
+                        this._sound.loop = true;
+                    }
+
+                    if (!this.loop && marker === '' && this.game.device.wechatMinigame)
+                    {
+                        this._sound.addEventListener('ended', this.onEndedHandler.bind(this));
+                    }
+
                     this._sound.play();
                     //  This doesn't become available until you call play(), wonderful ...
                     this.totalDuration = this._sound.duration;
