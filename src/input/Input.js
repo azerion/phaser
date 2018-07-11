@@ -987,7 +987,7 @@ Phaser.Input.prototype = {
                 }
             }
         }
-        else if (displayObject instanceof Phaser.Graphics)
+        else if (Phaser.Graphics && displayObject instanceof Phaser.Graphics)
         {
             for (var i = 0; i < displayObject.graphicsData.length; i++)
             {

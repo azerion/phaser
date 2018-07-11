@@ -783,6 +783,9 @@ Phaser.Camera.prototype = {
     * @method Phaser.Camera#resetFX
     */
     resetFX: function () {
+        if (!this.fx) {
+            return;
+        }
 
         this.fx.clear();
 
