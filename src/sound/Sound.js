@@ -1135,12 +1135,14 @@ Object.defineProperty(Phaser.Sound.prototype, "mute", {
             return;
         }
 
-        if (value)
-        {
+        if (value) {
             this._muted = true;
             this._muteVolume = this._tempVolume;
 
-            if (this.usingWebAudio)
+
+            if (this.game.device.wechatMinigame) {
+                    this._sound.pause();
+            } else if (this.usingWebAudio)
             {
                 this.gainNode.gain.value = 0;
             }
@@ -1153,7 +1155,9 @@ Object.defineProperty(Phaser.Sound.prototype, "mute", {
         {
             this._muted = false;
 
-            if (this.usingWebAudio)
+            if (this.game.device.wechatMinigame && this.isPlaying) {
+                this._sound.play();
+            } else if (this.usingWebAudio)
             {
                 this.gainNode.gain.value = this._muteVolume;
             }
