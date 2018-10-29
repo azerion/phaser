@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.11 "Kore Springs" - Built: Tue Jul 10 2018 11:56:40
+* v2.6.12 "Kore Springs" - Built: Mon Oct 29 2018 08:41:06
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -22758,7 +22758,7 @@ var Phaser = Phaser || {    // jshint ignore:line
     * @constant
     * @type {string}
     */
-    VERSION: '2.6.11',
+    VERSION: '2.6.12',
 
     /**
     * An array of Phaser game instances.
@@ -29117,6 +29117,9 @@ Phaser.Camera.prototype = {
     * @method Phaser.Camera#resetFX
     */
     resetFX: function () {
+        if (!this.fx) {
+            return;
+        }
 
         this.fx.clear();
 
@@ -36097,7 +36100,7 @@ Phaser.Game.prototype = {
         if (this.device.chrome)
         {
             var args = [
-                '%c %c %c @orange-games/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c http://phaser.io %c\u2665%c\u2665%c\u2665',
+                '%c %c %c @orange-games/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c https://github.com/orange-games / https://www.orangegames.com %c\u2665%c\u2665%c\u2665',
                 'background: #F47820',
                 'background: #ED873F',
                 'color: #ffffff; background: #DD6612;',
@@ -36122,7 +36125,7 @@ Phaser.Game.prototype = {
         }
         else if (window['console'])
         {
-            console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
+            console.log('@orange-games/phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | https://github.com/orange-games / https://www.orangegames.com');
         }
 
     },
@@ -37078,13 +37081,14 @@ Phaser.Input.prototype = {
         this.hitCanvas = PIXI.CanvasPool.create(this, 1, 1);
         this.hitContext = this.hitCanvas.getContext('2d');
 
-        if (this.game.device.mspointer)
-        {
-            this.mspointer.start();
-        }
-        else if (this.game.device.touch)
+
+        if (this.game.device.touch)
         {
             this.touch.start();
+        }
+        else if (this.game.device.mspointer)
+        {
+            this.mspointer.start();
         }
 
         if (!this.mspointer.active)
@@ -37644,7 +37648,7 @@ Phaser.Input.prototype = {
                 }
             }
         }
-        else if (displayObject instanceof Phaser.Graphics)
+        else if (Phaser.Graphics && displayObject instanceof Phaser.Graphics)
         {
             for (var i = 0; i < displayObject.graphicsData.length; i++)
             {
@@ -76849,12 +76853,14 @@ Object.defineProperty(Phaser.Sound.prototype, "mute", {
             return;
         }
 
-        if (value)
-        {
+        if (value) {
             this._muted = true;
             this._muteVolume = this._tempVolume;
 
-            if (this.usingWebAudio)
+
+            if (this.game.device.wechatMinigame) {
+                    this._sound.pause();
+            } else if (this.usingWebAudio)
             {
                 this.gainNode.gain.value = 0;
             }
@@ -76867,7 +76873,9 @@ Object.defineProperty(Phaser.Sound.prototype, "mute", {
         {
             this._muted = false;
 
-            if (this.usingWebAudio)
+            if (this.game.device.wechatMinigame && this.isPlaying) {
+                this._sound.play();
+            } else if (this.usingWebAudio)
             {
                 this.gainNode.gain.value = this._muteVolume;
             }

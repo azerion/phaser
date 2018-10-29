@@ -226,7 +226,7 @@ module.exports = function (grunt) {
                 //  3) PIXI
 
                 grunt.log.writeln("-> PIXI");
-                
+
                 if (!excludedKeys['intro'])
                 {
                     tasks.push('concat:pixiIntro');
@@ -235,7 +235,7 @@ module.exports = function (grunt) {
 
                 tasks.push('concat:pixiMain');
                 pixiFilelist.push('<%= modules_dir %>/pixi-main.js');
-                
+
                 //  Optional Rope
                 if (!excludedKeys['rope'])
                 {
@@ -299,7 +299,7 @@ module.exports = function (grunt) {
                 //  3) PIXI
 
                 grunt.log.writeln("-> PIXI");
-                
+
                 if (!excludedKeys['intro'])
                 {
                     tasks.push('concat:pixiIntro');
@@ -308,7 +308,7 @@ module.exports = function (grunt) {
 
                 tasks.push('concat:pixiMain');
                 filelist.push('<%= modules_dir %>/pixi-main.js');
-                
+
                 //  Optional Rope
                 if (!excludedKeys['rope'])
                 {
@@ -408,6 +408,7 @@ module.exports = function (grunt) {
         grunt.task.run('nophysics');
         grunt.task.run('minimum');
         grunt.task.run('split');
+        grunt.task.run('wechat');
 
     });
 
@@ -474,6 +475,23 @@ module.exports = function (grunt) {
 
         grunt.task.run('custom');
 
+    });
+
+    grunt.registerTask('wechat', 'Compile tiny Phaser to dist folder and splits the globals into single files', function() {
+
+        grunt.option('exclude', '' +
+            'system,math,utils,bitmapdata,weapon,create,' +
+            'rendertexture,gamepad,keyboard,tilemaps,retrofont,' +
+            'tilesprite,net,debug,flexgrid,video,' +
+            'ninja,creature,p2');
+        grunt.option('filename', 'phaser-wechat');
+        grunt.option('sourcemap', true);
+        grunt.option('copy', false);
+        grunt.option('copycustom', true);
+        grunt.option('uglify', true);
+        grunt.option('split', true);
+
+        grunt.task.run('custom');
     });
 
     grunt.registerTask('test', 'Phaser Test Build (all libs)', function() {

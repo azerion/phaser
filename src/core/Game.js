@@ -643,7 +643,7 @@ Phaser.Game.prototype = {
         if (this.device.chrome)
         {
             var args = [
-                '%c %c %c @orange-games/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c http://phaser.io %c\u2665%c\u2665%c\u2665',
+                '%c %c %c @orange-games/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c https://github.com/orange-games / https://www.orangegames.com %c\u2665%c\u2665%c\u2665',
                 'background: #F47820',
                 'background: #ED873F',
                 'color: #ffffff; background: #DD6612;',
@@ -668,7 +668,7 @@ Phaser.Game.prototype = {
         }
         else if (window['console'])
         {
-            console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
+            console.log('@orange-games/phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | https://github.com/orange-games / https://www.orangegames.com');
         }
 
     },

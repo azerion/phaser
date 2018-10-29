@@ -421,13 +421,14 @@ Phaser.Input.prototype = {
         this.hitCanvas = PIXI.CanvasPool.create(this, 1, 1);
         this.hitContext = this.hitCanvas.getContext('2d');
 
-        if (this.game.device.mspointer)
-        {
-            this.mspointer.start();
-        }
-        else if (this.game.device.touch)
+
+        if (this.game.device.touch)
         {
             this.touch.start();
+        }
+        else if (this.game.device.mspointer)
+        {
+            this.mspointer.start();
         }
 
         if (!this.mspointer.active)

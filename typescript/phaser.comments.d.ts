@@ -5615,8 +5615,8 @@ declare module Phaser {
         webmVideo: boolean;
 
         /**
-         * Is the device running on wechat-minigame platform?
-         */
+        * Is the game running within the WeChat minigame context?
+        */
         wechatMinigame: boolean;
 
         /**
@@ -9177,10 +9177,6 @@ declare module Phaser {
         */
         static SORT_DESCENDING: number;
 
-
-        /**
-        * The alpha value of the group container.
-        */
         alpha: number;
 
         /**
@@ -9418,13 +9414,6 @@ declare module Phaser {
         * visible children.
         */
         right: number;
-
-        /**
-        * The angle of rotation of the group container, in radians.
-        * 
-        * This will adjust the group container itself by modifying its rotation.
-        * This will have no impact on the rotation value of its children, but it will update their worldTransform and on-screen position.
-        */
         rotation: number;
         scale: Phaser.Point;
 
@@ -9445,10 +9434,6 @@ declare module Phaser {
         * Internal Phaser Type value.
         */
         type: number;
-
-        /**
-        * The visible state of the group. Non-visible Groups and all of their children are not rendered.
-        */
         visible: boolean;
 
         /**
@@ -9588,86 +9573,7 @@ declare module Phaser {
         * @return True if the Group children were aligned, otherwise false.
         */
         align(width: number, height: number, cellWidth: number, cellHeight: number, position?: number, offset?: number): boolean;
-
-        /**
-        * Aligns this Group within another Game Object, or Rectangle, known as the
-        * 'container', to one of 9 possible positions.
-        * 
-        * The container must be a Game Object, or Phaser.Rectangle object. This can include properties
-        * such as `World.bounds` or `Camera.view`, for aligning Groups within the world
-        * and camera bounds. Or it can include other Sprites, Images, Text objects, BitmapText,
-        * TileSprites or Buttons.
-        * 
-        * Please note that aligning a Group to another Game Object does **not** make it a child of
-        * the container. It simply modifies its position coordinates so it aligns with it.
-        * 
-        * The position constants you can use are:
-        * 
-        * `Phaser.TOP_LEFT`, `Phaser.TOP_CENTER`, `Phaser.TOP_RIGHT`, `Phaser.LEFT_CENTER`,
-        * `Phaser.CENTER`, `Phaser.RIGHT_CENTER`, `Phaser.BOTTOM_LEFT`,
-        * `Phaser.BOTTOM_CENTER` and `Phaser.BOTTOM_RIGHT`.
-        * 
-        * Groups are placed in such a way that their _bounds_ align with the
-        * container, taking into consideration rotation and scale of its children.
-        * This allows you to neatly align Groups, irrespective of their position value.
-        * 
-        * The optional `offsetX` and `offsetY` arguments allow you to apply extra spacing to the final
-        * aligned position of the Group. For example:
-        * 
-        * `group.alignIn(background, Phaser.BOTTOM_RIGHT, -20, -20)`
-        * 
-        * Would align the `group` to the bottom-right, but moved 20 pixels in from the corner.
-        * Think of the offsets as applying an adjustment to the containers bounds before the alignment takes place.
-        * So providing a negative offset will 'shrink' the container bounds by that amount, and providing a positive
-        * one expands it.
-        * 
-        * @param container The Game Object or Rectangle with which to align this Group to. Can also include properties such as `World.bounds` or `Camera.view`.
-        * @param position The position constant. One of `Phaser.TOP_LEFT` (default), `Phaser.TOP_CENTER`, `Phaser.TOP_RIGHT`, `Phaser.LEFT_CENTER`, `Phaser.CENTER`, `Phaser.RIGHT_CENTER`, `Phaser.BOTTOM_LEFT`, `Phaser.BOTTOM_CENTER` or `Phaser.BOTTOM_RIGHT`.
-        * @param offsetX A horizontal adjustment of the Containers bounds, applied to the aligned position of the Game Object. Use a negative value to shrink the bounds, positive to increase it.
-        * @param offsetY A vertical adjustment of the Containers bounds, applied to the aligned position of the Game Object. Use a negative value to shrink the bounds, positive to increase it.
-        * @return This Group.
-        */
         alignIn(container: Phaser.Rectangle | Phaser.Sprite | Phaser.Image | Phaser.Text | Phaser.BitmapText | Phaser.Button | Phaser.Graphics | Phaser.TileSprite, position?: number, offsetX?: number, offsetY?: number): Phaser.Group;
-
-        /**
-        * Aligns this Group to the side of another Game Object, or Rectangle, known as the
-        * 'parent', in one of 11 possible positions.
-        * 
-        * The parent must be a Game Object, or Phaser.Rectangle object. This can include properties
-        * such as `World.bounds` or `Camera.view`, for aligning Groups within the world
-        * and camera bounds. Or it can include other Sprites, Images, Text objects, BitmapText,
-        * TileSprites or Buttons.
-        * 
-        * Please note that aligning a Group to another Game Object does **not** make it a child of
-        * the parent. It simply modifies its position coordinates so it aligns with it.
-        * 
-        * The position constants you can use are:
-        * 
-        * `Phaser.TOP_LEFT` (default), `Phaser.TOP_CENTER`, `Phaser.TOP_RIGHT`, `Phaser.LEFT_TOP`,
-        * `Phaser.LEFT_CENTER`, `Phaser.LEFT_BOTTOM`, `Phaser.RIGHT_TOP`, `Phaser.RIGHT_CENTER`,
-        * `Phaser.RIGHT_BOTTOM`, `Phaser.BOTTOM_LEFT`, `Phaser.BOTTOM_CENTER`
-        * and `Phaser.BOTTOM_RIGHT`.
-        * 
-        * Groups are placed in such a way that their _bounds_ align with the
-        * parent, taking into consideration rotation and scale of the children.
-        * This allows you to neatly align Groups, irrespective of their position value.
-        * 
-        * The optional `offsetX` and `offsetY` arguments allow you to apply extra spacing to the final
-        * aligned position of the Group. For example:
-        * 
-        * `group.alignTo(background, Phaser.BOTTOM_RIGHT, -20, -20)`
-        * 
-        * Would align the `group` to the bottom-right, but moved 20 pixels in from the corner.
-        * Think of the offsets as applying an adjustment to the parents bounds before the alignment takes place.
-        * So providing a negative offset will 'shrink' the parent bounds by that amount, and providing a positive
-        * one expands it.
-        * 
-        * @param parent The Game Object or Rectangle with which to align this Group to. Can also include properties such as `World.bounds` or `Camera.view`.
-        * @param position The position constant. One of `Phaser.TOP_LEFT`, `Phaser.TOP_CENTER`, `Phaser.TOP_RIGHT`, `Phaser.LEFT_TOP`, `Phaser.LEFT_CENTER`, `Phaser.LEFT_BOTTOM`, `Phaser.RIGHT_TOP`, `Phaser.RIGHT_CENTER`, `Phaser.RIGHT_BOTTOM`, `Phaser.BOTTOM_LEFT`, `Phaser.BOTTOM_CENTER` or `Phaser.BOTTOM_RIGHT`.
-        * @param offsetX A horizontal adjustment of the Containers bounds, applied to the aligned position of the Game Object. Use a negative value to shrink the bounds, positive to increase it.
-        * @param offsetY A vertical adjustment of the Containers bounds, applied to the aligned position of the Game Object. Use a negative value to shrink the bounds, positive to increase it.
-        * @return This Group.
-        */
         alignTo(container: Phaser.Rectangle | Phaser.Sprite | Phaser.Image | Phaser.Text | Phaser.BitmapText | Phaser.Button | Phaser.Graphics | Phaser.TileSprite, position?: number, offsetX?: number, offsetY?: number): Phaser.Group;
 
         /**
