@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.12 "Kore Springs" - Built: Mon Oct 29 2018 08:41:06
+* v2.6.13 "Kore Springs" - Built: Wed Dec 05 2018 13:31:47
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -22758,7 +22758,7 @@ var Phaser = Phaser || {    // jshint ignore:line
     * @constant
     * @type {string}
     */
-    VERSION: '2.6.12',
+    VERSION: '2.6.13',
 
     /**
     * An array of Phaser game instances.
@@ -31819,9 +31819,18 @@ Phaser.Stage.prototype.preUpdate = function () {
     this.currentRenderOrderID = 0;
 
     //  This can't loop in reverse, we need the renderOrderID to be in sequence
-    for (var i = 0; i < this.children.length; i++)
+    var i = 0;
+
+    while (i < this.children.length)
     {
-        this.children[i].preUpdate();
+        var child = this.children[i];
+
+        child.preUpdate();
+
+        if (this === child.parent)
+        {
+            i++;
+        }
     }
 
 };
@@ -31926,6 +31935,13 @@ Phaser.Stage.prototype.checkVisibility = function () {
         return _this.visibilityChange(event);
     };
 
+    this._onClick = function (event) {
+        if (!document.hasFocus())
+        {
+            _this.visibilityChange(event);
+        }
+    };
+
     //  Does browser support it? If not (like in IE9 or old Android) we need to fall back to blur/focus
     if (this._hiddenVar)
     {
@@ -31937,7 +31953,9 @@ Phaser.Stage.prototype.checkVisibility = function () {
 
     window.onpagehide = this._onChange;
     window.onpageshow = this._onChange;
-    
+
+    window.addEventListener('click', this._onClick);
+
     if (this.game.device.cocoonJSApp)
     {
         CocoonJS.App.onSuspended.addEventListener(function () {
@@ -31959,18 +31977,19 @@ Phaser.Stage.prototype.checkVisibility = function () {
 */
 Phaser.Stage.prototype.visibilityChange = function (event) {
 
-    if (event.type === 'pagehide' || event.type === 'blur' || event.type === 'pageshow' || event.type === 'focus')
-    {
-        if (event.type === 'pagehide' || event.type === 'blur')
-        {
-            this.game.focusLoss(event);
-        }
-        else if (event.type === 'pageshow' || event.type === 'focus')
-        {
-            this.game.focusGain(event);
-        }
+    // These events always trigger the Game#onBlur or Game#onFocus signals.
 
-        return;
+    switch (event.type)
+    {
+        case 'blur':
+        case 'pagehide':
+            this.game.focusLoss(event);
+            return;
+        case 'click':
+        case 'focus':
+        case 'pageshow':
+            this.game.focusGain(event);
+            return;
     }
 
     if (this.disableVisibilityChange)
@@ -32033,6 +32052,8 @@ Phaser.Stage.prototype.destroy = function () {
 
     window.onblur = null;
     window.onfocus = null;
+
+    window.removeEventListener('click', this._onClick);
 
 };
 
@@ -37074,21 +37095,20 @@ Phaser.Input.prototype = {
         this.position = new Phaser.Point();
         this._oldPosition = new Phaser.Point();
 
-        this.circle = new Phaser.Circle(0, 0, 44);
+        this.circle = new Phaser.Circle(0, 0, 45);
 
         this.activePointer = this.mousePointer;
 
         this.hitCanvas = PIXI.CanvasPool.create(this, 1, 1);
         this.hitContext = this.hitCanvas.getContext('2d');
 
-
-        if (this.game.device.touch)
-        {
-            this.touch.start();
-        }
-        else if (this.game.device.mspointer)
+        if (this.game.device.mspointer)
         {
             this.mspointer.start();
+        }
+        else if (this.game.device.touch)
+        {
+            this.touch.start();
         }
 
         if (!this.mspointer.active)
@@ -38536,7 +38556,7 @@ Object.defineProperties(WheelEventProxy.prototype, {
 * It will work only in Internet Explorer 10+ and Windows Store or Windows Phone 8 apps using JavaScript.
 * http://msdn.microsoft.com/en-us/library/ie/hh673557(v=vs.85).aspx
 *
-* You should not normally access this class directly, but instead use a Phaser.Pointer object which 
+* You should not normally access this class directly, but instead use a Phaser.Pointer object which
 * normalises all game input for you including accurate button handling.
 *
 * Please note that at the current time of writing Phaser does not yet support chorded button interactions:
@@ -38582,29 +38602,29 @@ Phaser.MSPointer = function (game) {
     /**
     * @property {boolean} capture - If true the Pointer events will have event.preventDefault applied to them, if false they will propagate fully.
     */
-    this.capture = true;
+    this.capture = false;
 
     /**
-    * This property was removed in Phaser 2.4 and should no longer be used.
-    * Instead please see the Pointer button properties such as `Pointer.leftButton`, `Pointer.rightButton` and so on.
-    * Or Pointer.button holds the DOM event button value if you require that.
-    * @property {number} button
-    */
-    this.button = -1;
-
-    /**
-    * The browser MSPointer DOM event. Will be null if no event has ever been received.
-    * Access this property only inside a Pointer event handler and do not keep references to it.
-    * @property {MSPointerEvent|null} event
-    * @default
-    */
+     * The most recent PointerEvent from the browser. Will be null if no event has ever been received.
+     * Access this property only inside a Pointer event handler and do not keep references to it.
+     * @property {MSPointerEvent|PointerEvent|null} event
+     * @default
+     */
     this.event = null;
 
     /**
-    * MSPointer input will only be processed if enabled.
-    * @property {boolean} enabled
-    * @default
-    */
+     * Whether the input handler is active.
+     * @property {boolean} active
+     * @readOnly
+     * @default
+     */
+    this.active = false;
+
+    /**
+     * PointerEvent input will only be processed if enabled.
+     * @property {boolean} enabled
+     * @default
+     */
     this.enabled = true;
 
     /**
@@ -38648,77 +38668,90 @@ Phaser.MSPointer = function (game) {
 Phaser.MSPointer.prototype = {
 
     /**
-    * Starts the event listeners running.
-    * @method Phaser.MSPointer#start
-    */
-    start: function () {
+     * Starts the event listeners running.
+     * @method Phaser.MSPointer#start
+     */
+    start: function ()
+    {
+
+        if (!this.game.device.mspointer)
+        {
+            return false;
+        }
 
         if (this._onMSPointerDown !== null)
         {
             //  Avoid setting multiple listeners
-            return;
+            return false;
         }
 
         var _this = this;
 
-        if (this.game.device.mspointer)
+        this._onMSPointerDown = function (event)
         {
-            this._onMSPointerDown = function (event) {
-                return _this.onPointerDown(event);
-            };
+            return _this.onPointerDown(event);
+        };
 
-            this._onMSPointerMove = function (event) {
-                return _this.onPointerMove(event);
-            };
+        this._onMSPointerMove = function (event)
+        {
+            return _this.onPointerMove(event);
+        };
 
-            this._onMSPointerUp = function (event) {
-                return _this.onPointerUp(event);
-            };
+        this._onMSPointerUp = function (event)
+        {
+            return _this.onPointerUp(event);
+        };
 
-            this._onMSPointerUpGlobal = function (event) {
-                return _this.onPointerUpGlobal(event);
-            };
+        this._onMSPointerUpGlobal = function (event)
+        {
+            return _this.onPointerUpGlobal(event);
+        };
 
-            this._onMSPointerOut = function (event) {
-                return _this.onPointerOut(event);
-            };
+        this._onMSPointerOut = function (event)
+        {
+            return _this.onPointerOut(event);
+        };
 
-            this._onMSPointerOver = function (event) {
-                return _this.onPointerOver(event);
-            };
+        this._onMSPointerOver = function (event)
+        {
+            return _this.onPointerOver(event);
+        };
 
-            var canvas = this.game.canvas;
+        var canvas = this.game.canvas;
 
-            canvas.addEventListener('MSPointerDown', this._onMSPointerDown, false);
-            canvas.addEventListener('MSPointerMove', this._onMSPointerMove, false);
-            canvas.addEventListener('MSPointerUp', this._onMSPointerUp, false);
+        canvas.addEventListener('MSPointerDown', this._onMSPointerDown, false);
+        canvas.addEventListener('MSPointerMove', this._onMSPointerMove, false);
+        canvas.addEventListener('MSPointerUp', this._onMSPointerUp, false);
+
+        //  IE11+ uses non-prefix events
+        canvas.addEventListener('pointerdown', this._onMSPointerDown, false);
+        canvas.addEventListener('pointermove', this._onMSPointerMove, false);
+        canvas.addEventListener('pointerup', this._onMSPointerUp, false);
+
+        canvas.style['-ms-content-zooming'] = 'none';
+        canvas.style['-ms-touch-action'] = 'none';
+
+        if (!this.game.device.cocoonJS)
+        {
+            window.addEventListener('MSPointerUp', this._onMSPointerUpGlobal, true);
+            canvas.addEventListener('MSPointerOver', this._onMSPointerOver, true);
+            canvas.addEventListener('MSPointerOut', this._onMSPointerOut, true);
 
             //  IE11+ uses non-prefix events
-            canvas.addEventListener('pointerdown', this._onMSPointerDown, false);
-            canvas.addEventListener('pointermove', this._onMSPointerMove, false);
-            canvas.addEventListener('pointerup', this._onMSPointerUp, false);
-
-            canvas.style['-ms-content-zooming'] = 'none';
-            canvas.style['-ms-touch-action'] = 'none';
-
-            if (!this.game.device.cocoonJS)
-            {
-                window.addEventListener('MSPointerUp', this._onMSPointerUpGlobal, true);
-                canvas.addEventListener('MSPointerOver', this._onMSPointerOver, true);
-                canvas.addEventListener('MSPointerOut', this._onMSPointerOut, true);
-
-                //  IE11+ uses non-prefix events
-                window.addEventListener('pointerup', this._onMSPointerUpGlobal, true);
-                canvas.addEventListener('pointerover', this._onMSPointerOver, true);
-                canvas.addEventListener('pointerout', this._onMSPointerOut, true);
-            }
+            window.addEventListener('pointerup', this._onMSPointerUpGlobal, true);
+            canvas.addEventListener('pointerover', this._onMSPointerOver, true);
+            canvas.addEventListener('pointerout', this._onMSPointerOut, true);
         }
+
+        this.active = true;
+
+        return true;
 
     },
 
     /**
     * The function that handles the PointerDown event.
-    * 
+    *
     * @method Phaser.MSPointer#onPointerDown
     * @param {PointerEvent} event - The native DOM event.
     */
@@ -38830,7 +38863,7 @@ Phaser.MSPointer.prototype = {
 
     /**
     * The internal method that handles the mouse up event from the window.
-    * 
+    *
     * @method Phaser.MSPointer#onPointerUpGlobal
     * @param {PointerEvent} event - The native event from the browser. This gets stored in MSPointer.event.
     */
@@ -38968,6 +39001,8 @@ Phaser.MSPointer.prototype = {
         window.removeEventListener('pointerup', this._onMSPointerUpGlobal, true);
         canvas.removeEventListener('pointerover', this._onMSPointerOver, true);
         canvas.removeEventListener('pointerout', this._onMSPointerOut, true);
+
+        this.active = false;
 
     }
 

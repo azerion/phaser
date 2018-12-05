@@ -414,21 +414,20 @@ Phaser.Input.prototype = {
         this.position = new Phaser.Point();
         this._oldPosition = new Phaser.Point();
 
-        this.circle = new Phaser.Circle(0, 0, 44);
+        this.circle = new Phaser.Circle(0, 0, 45);
 
         this.activePointer = this.mousePointer;
 
         this.hitCanvas = PIXI.CanvasPool.create(this, 1, 1);
         this.hitContext = this.hitCanvas.getContext('2d');
 
-
-        if (this.game.device.touch)
-        {
-            this.touch.start();
-        }
-        else if (this.game.device.mspointer)
+        if (this.game.device.mspointer)
         {
             this.mspointer.start();
+        }
+        else if (this.game.device.touch)
+        {
+            this.touch.start();
         }
 
         if (!this.mspointer.active)
