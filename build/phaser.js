@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.13 "Kore Springs" - Built: Wed Dec 05 2018 13:31:47
+* v2.6.14 "Kore Springs" - Built: Thu Jan 17 2019 15:17:02
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -14802,7 +14802,7 @@ PIXI.DisplayObjectContainer.prototype.removeChildren = function (beginIndex, end
 
     if (range > 0 && range <= endIndex)
     {
-        var removed = this.children.splice(begin, range);
+        var removed = this.children.splice(beginIndex, range);
 
         for (var i = 0; i < removed.length; i++)
         {
@@ -22758,7 +22758,7 @@ var Phaser = Phaser || {    // jshint ignore:line
     * @constant
     * @type {string}
     */
-    VERSION: '2.6.13',
+    VERSION: '2.6.14',
 
     /**
     * An array of Phaser game instances.
