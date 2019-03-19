@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.14 "Kore Springs" - Built: Thu Jan 17 2019 15:17:19
+* v2.6.14 "Kore Springs" - Built: Fri Mar 15 2019 14:45:47
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -13416,7 +13416,7 @@ Phaser.Game.prototype = {
         if (this.device.chrome)
         {
             var args = [
-                '%c %c %c @orange-games/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c https://github.com/orange-games / https://www.orangegames.com %c\u2665%c\u2665%c\u2665',
+                '%c %c %c @azerion/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c https://github.com/azerion / https://www.azerion.com %c\u2665%c\u2665%c\u2665',
                 'background: #F47820',
                 'background: #ED873F',
                 'color: #ffffff; background: #DD6612;',
@@ -13441,7 +13441,7 @@ Phaser.Game.prototype = {
         }
         else if (window['console'])
         {
-            console.log('@orange-games/phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | https://github.com/orange-games / https://www.orangegames.com');
+            console.log('@azerion/phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | https://github.com/azerion / https://www.azerion.com');
         }
 
     },
