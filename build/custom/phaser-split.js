@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.14 "Kore Springs" - Built: Fri Mar 15 2019 14:45:50
+* v2.6.15 "Kore Springs" - Built: Fri Apr 05 2019 11:14:10
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -53,7 +53,7 @@ var Phaser = Phaser || {    // jshint ignore:line
     * @constant
     * @type {string}
     */
-    VERSION: '2.6.14',
+    VERSION: '2.6.15',
 
     /**
     * An array of Phaser game instances.
@@ -13417,11 +13417,11 @@ Phaser.Game.prototype = {
         {
             var args = [
                 '%c %c %c @azerion/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c https://github.com/azerion / https://www.azerion.com %c\u2665%c\u2665%c\u2665',
-                'background: #F47820',
-                'background: #ED873F',
-                'color: #ffffff; background: #DD6612;',
-                'background: #ED873F',
-                'background: #F47820',
+                'background: #7ab3eb',
+                'background: #378ce1',
+                'color: #ffffff; background: #207cd8;',
+                'background: #378ce1',
+                'background: #7ab3eb',
                 'background: #ffffff'
             ];
 
@@ -56483,20 +56483,12 @@ Phaser.ScaleManager.prototype = {
             }
             else if (scaleMode === Phaser.ScaleManager.SHOW_ALL)
             {
-                if (!this.isFullScreen && this.boundingParent &&
-                    this.compatibility.canExpandParent)
-                {
-                    // Try to expand parent out, but choosing maximizing dimensions.                    
-                    // Then select minimize dimensions which should then honor parent
-                    // maximum bound applications.
-                    this.setShowAll(true);
-                    this.resetCanvas();
-                    this.setShowAll();
-                }
-                else
-                {
-                    this.setShowAll();
-                }
+                // Try to expand parent out, but choosing maximizing dimensions.
+                // Then select minimize dimensions which should then honor parent
+                // maximum bound applications.
+                this.setShowAll(true);
+                this.resetCanvas();
+                this.setShowAll();
             }
             else if (scaleMode === Phaser.ScaleManager.NO_SCALE)
             {

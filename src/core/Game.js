@@ -644,11 +644,11 @@ Phaser.Game.prototype = {
         {
             var args = [
                 '%c %c %c @azerion/phaser v' + v + ' | Pixi.js | ' + r + ' | ' + a + '  %c %c ' + '%c https://github.com/azerion / https://www.azerion.com %c\u2665%c\u2665%c\u2665',
-                'background: #F47820',
-                'background: #ED873F',
-                'color: #ffffff; background: #DD6612;',
-                'background: #ED873F',
-                'background: #F47820',
+                'background: #7ab3eb',
+                'background: #378ce1',
+                'color: #ffffff; background: #207cd8;',
+                'background: #378ce1',
+                'background: #7ab3eb',
                 'background: #ffffff'
             ];
 

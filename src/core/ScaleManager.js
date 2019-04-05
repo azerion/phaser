@@ -1362,20 +1362,12 @@ Phaser.ScaleManager.prototype = {
             }
             else if (scaleMode === Phaser.ScaleManager.SHOW_ALL)
             {
-                if (!this.isFullScreen && this.boundingParent &&
-                    this.compatibility.canExpandParent)
-                {
-                    // Try to expand parent out, but choosing maximizing dimensions.                    
-                    // Then select minimize dimensions which should then honor parent
-                    // maximum bound applications.
-                    this.setShowAll(true);
-                    this.resetCanvas();
-                    this.setShowAll();
-                }
-                else
-                {
-                    this.setShowAll();
-                }
+                // Try to expand parent out, but choosing maximizing dimensions.
+                // Then select minimize dimensions which should then honor parent
+                // maximum bound applications.
+                this.setShowAll(true);
+                this.resetCanvas();
+                this.setShowAll();
             }
             else if (scaleMode === Phaser.ScaleManager.NO_SCALE)
             {

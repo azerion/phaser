@@ -407,7 +407,7 @@ module.exports = function (grunt) {
         grunt.task.run('arcadephysics');
         grunt.task.run('nophysics');
         grunt.task.run('minimum');
-        grunt.task.run('wechat');
+        // grunt.task.run('wechat');
         grunt.task.run('split');
 
     });
