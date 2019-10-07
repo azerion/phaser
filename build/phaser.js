@@ -7,7 +7,7 @@
 *
 * Phaser - http://phaser.io
 *
-* v2.6.15 "Kore Springs" - Built: Fri Apr 05 2019 11:13:52
+* v2.6.16 "Kore Springs" - Built: Mon Oct 07 2019 10:55:48
 *
 * By Richard Davey http://www.photonstorm.com @photonstorm
 *
@@ -61439,7 +61439,7 @@ Phaser.Device._initialize = function () {
         device.pixelRatio = window['devicePixelRatio'] || 1;
         device.iPhone = navigator.userAgent.toLowerCase().indexOf('iphone') !== -1;
         device.iPhone4 = (device.pixelRatio === 2 && device.iPhone);
-        device.iPad = navigator.userAgent.toLowerCase().indexOf('ipad') !== -1;
+        device.iPad = _isIpad();
 
         if (typeof Int8Array !== 'undefined')
         {
@@ -61465,6 +61465,22 @@ Phaser.Device._initialize = function () {
             device.vibration = true;
         }
 
+    }
+
+    /**
+     * Had to introduce this check due to iPadOS, as Safari there now mimick's desktop, resulting in games using the wrong settings
+     *
+     * @returns {boolean}
+     * @private
+     */
+    function _isIpad() {
+        var isIpad = navigator.userAgent.toLowerCase().indexOf('ipad') !== -1;
+
+        if (!isIpad && navigator.userAgent.match(/Mac/) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2) {
+            return true;
+        }
+
+        return isIpad;
     }
 
     /**
