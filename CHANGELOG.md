@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 2.6.16 - 7th October 2019
+
+### Bug Fixes
+
+* Applied fix for ipadOS device check
+
 ## Version 2.6.2 - "Kore Springs" - 26th August 2016
 
 ### New Features
